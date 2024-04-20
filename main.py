@@ -1,4 +1,4 @@
-from functions import extract_id
+from functions import extract_id, in_list, csv_update, csv_read, mergeSort
 import customtkinter as ctk
 import tkinter as tk
 
@@ -65,10 +65,18 @@ class App(ctk.CTk):
         # Commit Card Entry Button
         self.generateResultsButton = ctk.CTkButton(self, text="Log Snack Redemption (Card)", command=self.generateResultsCard)
         self.generateResultsButton.grid(row=5, column=2, columnspan=2, padx=20, pady=20, sticky="ew")
+
+        # Load ECE Database Button
+        self.generateResultsButton = ctk.CTkButton(self, text="Load ECE Database", command=self.loadECEdatabase)
+        self.generateResultsButton.grid(row=7, column=0, columnspan=2, padx=20, pady=20, sticky="ew")
+
+        # Load Daily Database Button
+        self.generateResultsButton = ctk.CTkButton(self, text="Load Daily Database", command=self.loadDailyDatabase)
+        self.generateResultsButton.grid(row=7, column=2, columnspan=2, padx=20, pady=20, sticky="ew")
  
         # Text Box
         self.displayBox = ctk.CTkTextbox(self, width=200, height=300)
-        self.displayBox.grid(row=6, column=0, columnspan=4, padx=20, pady=20, sticky="nsew")
+        self.displayBox.grid(row=9, column=0, columnspan=4, padx=20, pady=20, sticky="nsew")
  
  
     # This function is used to insert the details entered by users into the textbox
@@ -84,27 +92,26 @@ class App(ctk.CTk):
         else:
             text2 = "ID: " + card_id + "\n"
 
-        # NEED TO ADD
         text3 = ""
-        #ece_student = is_ece_student(card_id)  
-        #if (is_ece_student):
-        #    text3 = "ECE Student: " + "Yes" + "\n"
-        #else:
-        #    text3 = "ECE Student: " + "No" + "\n"
+        ece_student = in_list(ECEdatabase,0, len(ECEdatabase) - 1, card_id)  
+        if (ece_student):
+            text3 = "ECE Student: " + "Yes" + "\n"
+        else:
+            text3 = "ECE Student: " + "No" + "\n"
 
         text4 = ""
-        #redeemable = is_redeemable(card_id, dow)
-        # if (redeemable):
-        #     text4 = "Redeemable: " + "Yes" + "\n"
-        # else:
-        #     text4 = "Redeemable: " + "No" + "\n"
+        redeemable = in_list(dailyDatabase, 0, len(dailyDatabase) - 1, card_id)
+        if (redeemable):
+            text4 = "Redeemable: " + "Yes" + "\n"
+        else:
+            text4 = "Redeemable: " + "No" + "\n"
 
         text5 = ""
-        #logged = log_snack_redemption(card_id, dow)
-        # if (logged):
-        #     text5 = "Logged: " + "Yes" + "\n"
-        # else:
-        #     text5 = "Logged: " + "No" + "\n"
+        logged = csv_update(dow, card_id)
+        if (logged):
+            text5 = "Logged: " + "Yes" + "\n"
+        else:
+            text5 = "Logged: " + "No" + "\n"
 
         text = text1 + text2 + text3 + text4 + text5
         self.displayBox.insert("0.0", text)
@@ -125,9 +132,32 @@ class App(ctk.CTk):
         text = text1 + text2
 
         self.displayBox.insert("0.0", text)
+
+    def loadECEdatabase(self):
+
+        self.displayBox.delete("0.0", "200.0")
+
+        global ECEdatabase
+        ECEdatabase = csv_read("ece_database")
+
+        self.displayBox.insert("0.0", "ECE Database Loaded")
+
+        return ECEdatabase
+
+    def loadDailyDatabase(self):
+
+        dow = self.dowVar.get()
+
+        self.displayBox.delete("0.0", "200.0")
+
+        global dailyDatabase
+        dailyDatabase = csv_read(dow)
+
+        self.displayBox.insert("0.0", "Daily Database Loaded")
+
+        return dailyDatabase
  
 if __name__ == "__main__":
     app = App()
     # Used to run the application
     app.mainloop()  
-    

@@ -19,7 +19,7 @@ def in_list(arr, low, high, x):
  
         # If element is present at the middle itself
         if arr[mid] == x:
-            return mid
+            return True
  
         # If element is smaller than mid, then it can only
         # be present in left subarray
@@ -75,7 +75,8 @@ def csv_update(dow, purdue_id):
 	
     return True
 
-def csv_read(filename):
+def csv_read(input_string):
+    filename = f"records/{input_string}.csv"
     output = []
     with open(filename, 'r', newline='') as csvfile:
         reader = csv.reader(csvfile)
