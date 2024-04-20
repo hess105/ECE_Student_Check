@@ -33,7 +33,7 @@ class App(ctk.CTk):
         self.nameLabel.grid(row=1, column=0, padx=20, pady=20, sticky="ew")
  
         # Card Entry Field
-        self.cardEntry = ctk.CTkEntry(self, placeholder_text=";000000000=1229=0032628840=01?")
+        self.cardEntry = ctk.CTkEntry(self, placeholder_text=";000000000=1229=0123456789=01?")
         self.cardEntry.grid(row=1, column=1, columnspan=3, padx=20, pady=20, sticky="ew")
  
         # Day of the Week Label
