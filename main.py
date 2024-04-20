@@ -130,5 +130,4 @@ if __name__ == "__main__":
     app = App()
     # Used to run the application
     app.mainloop()  
-
-
+    
